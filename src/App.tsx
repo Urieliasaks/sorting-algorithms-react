@@ -1,6 +1,8 @@
 import "./App.css";
 import { useState, ChangeEvent } from "react";
-import { ArrayGraph, MergeSort } from "./components";
+import { MergeSort, QuickSort } from "./components";
+
+const sortingOptions = ["Merge Sort", "Bubble Sort", "Quick Sort", "Insertion Sort"];
 
 const App = () => {
 	const [data, setData] = useState<number[]>([]);
@@ -11,6 +13,8 @@ const App = () => {
 		switch (activeGraph) {
 			case "Merge Sort":
 				return <MergeSort data={data} />;
+			case "Quick Sort":
+				return <QuickSort data={data} />;
 			default:
 				return <></>;
 		}
@@ -19,7 +23,7 @@ const App = () => {
 	const shuffleArray = (arr: number[]): number[] => {
 		let randomIndex;
 		let currentIndex = arr.length;
-		while (currentIndex != 0) {
+		while (currentIndex !== 0) {
 			randomIndex = Math.floor(Math.random() * currentIndex);
 			currentIndex--;
 			[arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
@@ -41,7 +45,6 @@ const App = () => {
 		}
 		let temp = Array.from(Array(numOfItems).keys()).map((x) => x + 1);
 		setData(shuffleArray(temp));
-		setActiveGraph("Merge Sort");
 	};
 
 	return (
@@ -51,17 +54,36 @@ const App = () => {
 				<h2>{activeGraph}</h2>
 			</div>
 			<form className="app-form" onSubmit={onSubmitForm}>
-				<input
-					className="number-input"
-					placeholder="Type number of items..."
-					onChange={onChangeInput}
-					maxLength={2}
-				/>
-				<button type="submit">Start</button>
+				<div className="form-row">
+					{sortingOptions.map((name, index) => (
+						<button
+							key={index}
+							type="button"
+							className={activeGraph === name ? "sorting-button-selected" : "sorting-button"}
+							onClick={() => setActiveGraph(name)}
+						>
+							{name}
+						</button>
+					))}
+				</div>
+				<div className="form-row">
+					<input
+						type="text"
+						className="number-input"
+						placeholder="Type number of items..."
+						onChange={onChangeInput}
+						maxLength={2}
+					/>
+					<button type="submit">Start</button>
+				</div>
 			</form>
-			<div className="display-graph-container">
-				<DisplayGraph />
-			</div>
+			{activeGraph !== "" && data.length ? (
+				<div className="display-graph-container">
+					<DisplayGraph />
+				</div>
+			) : (
+				<></>
+			)}
 		</div>
 	);
 };

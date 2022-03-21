@@ -1,10 +1,6 @@
 import { AnimatedGraph } from "../";
 import { useState, useEffect } from "react";
 
-interface MergeSortProps {
-	data: number[];
-}
-
 const sortFunc = (data: number[]) => {
 	let steps: number[][] = [];
 	steps.push([...data]);
@@ -22,13 +18,14 @@ const sortFunc = (data: number[]) => {
 				}
 				i++;
 			}
-			if (h == 1) break;
+
+			if (h === 1) break;
 			h = Math.ceil(h / 2);
 		}
 	};
 
 	const mergeSortInPlace = (arr: number[], start: number, end: number) => {
-		if (start == end) return;
+		if (start === end) return;
 		let mid = Math.floor((start + end) / 2);
 		mergeSortInPlace(arr, start, mid);
 		mergeSortInPlace(arr, mid + 1, end);
@@ -37,6 +34,10 @@ const sortFunc = (data: number[]) => {
 	mergeSortInPlace(data, 0, data.length - 1);
 	return steps;
 };
+
+interface MergeSortProps {
+	data: number[];
+}
 
 const MergeSort = ({ data }: MergeSortProps) => {
 	const [iterations, setIterations] = useState<number[][]>();
